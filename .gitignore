@@ -2,13 +2,6 @@
 # ----------------------------------------------------------------------------
 
 # define here your ignore instructions
-pc4x4*
-*.zip
-/root
-*.key
-*.crt
-*.save
-.idea
 
 # general
 *.kate-swp
@@ -36,7 +29,6 @@ tags
 .DS_Store
 .directory
 *.debug
-Makefile*
 *.prl
 *.app
 moc_*.cpp
