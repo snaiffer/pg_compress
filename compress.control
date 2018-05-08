@@ -1,4 +1,4 @@
 # compress extension
 comment = 'A bundle of functions for compress/uncompress data with help of various algo'
-default_version = '0.0.1'
+default_version = '0.0.2'
 relocatable = true

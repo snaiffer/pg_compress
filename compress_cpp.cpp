@@ -16,7 +16,7 @@ static inline bool is_base64(unsigned char c) {
   return (isalnum(c) || (c == '+') || (c == '/'));
 }
 
-std::string base64_encode(unsigned char const* bytes_to_encode, unsigned int in_len) {
+std::string base64_encode(char const* bytes_to_encode, unsigned int in_len) {
   std::string ret;
   int i = 0;
   int j = 0;
@@ -112,6 +112,35 @@ extern "C" int unzip_base64_cpp(const char* packed, const int packed_len, char**
     if (*unpacked == NULL)
       return 2; // Ошибка выделения памяти
     copy(pak[file_num]["data"].begin(), pak[file_num]["data"].end(), *unpacked);
+  }
+  catch(...)
+  {
+    return 3;
+  }
+
+  return 0;
+}
+
+// compress_level: 10 (fast), 50 (middle), 90 (slow, best compression)
+extern "C" int zip_base64_cpp(const char* file_name, const int file_name_len, const char* data, const int data_len, char** packed, int *packed_len, const int compress_level)
+{
+  try
+  {
+    file data_file;
+    data_file["name"] = string(file_name, file_name_len);
+    data_file["data"] = string(data, data_len);
+
+    archive pak;
+    pak.push_back(data_file);
+    string packed_str = pak.zip(compress_level);
+
+    string packed_base64_str = base64_encode(packed_str.data(), packed_str.length());
+
+    *packed_len = packed_base64_str.length();
+    *packed = (char*) malloc(*packed_len  * sizeof(char));
+    if (*packed == NULL)
+      return 2; // Ошибка выделения памяти
+    copy(packed_base64_str.begin(), packed_base64_str.end(), *packed);
   }
   catch(...)
   {
